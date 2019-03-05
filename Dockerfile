@@ -8,11 +8,10 @@ RUN apk add --no-cache --virtual .build-deps git \
     && apk add --no-cache --virtual .dehydrated-rundeps python3 bash openssl curl \
     && pip3 install --upgrade pip boto3 dns-lexicon dns-lexicon[route53] dns-lexicon[transip] \
     && rm -r /root/.cache \
-
     && cd /tmp \
     && git clone https://github.com/lukas2511/dehydrated.git \
     && cd dehydrated \
-    && git checkout tags/v0.4.0 \
+    && git checkout master \
     && cd .. \
     && chmod a+x dehydrated/dehydrated \
     && mv dehydrated/dehydrated /usr/bin/ \
@@ -23,7 +22,6 @@ RUN apk add --no-cache --virtual .build-deps git \
     && chmod a+x lexicon/examples/dehydrated.default.sh \
     && mv lexicon/examples/dehydrated.default.sh /usr/bin/dehydrated-dns \
     && rm -rf /tmp/* \
-
     && apk del .build-deps
 
 COPY config /etc/dehydrated/config
