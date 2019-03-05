@@ -13,22 +13,5 @@ if [ "${LOG}" == "TRUE" ]; then
 	exec 2> >(read message; echo "${UUID} $(date -Iseconds) [error] $message" | tee -a ${LOG_FILE} >&2)
 fi
 
-if [ "${LE_ENV}" == 'production' ]; then
-	echo "***** production *****"
-	sed -i 's@CA=.*@CA="https://acme-v01.api.letsencrypt.org/directory"@g' /etc/dehydrated/config
-else
-	echo "***** staging *****"
-fi
-
-# comma = new line
-if [ -z ${LE_DOMAIN+x} ]; then
-    echo "***** Skipping domains.txt *****"
-    echo "Ensure --domain arg is set"
-else
-    echo "***** Creating domains.txt *****"
-    echo ${LE_DOMAIN} | sed -e $'s/,/\\\n/g' > /etc/dehydrated/domains.txt
-    cat /etc/dehydrated/domains.txt
-fi
-
 echo "${@}"
 exec "${@}"
